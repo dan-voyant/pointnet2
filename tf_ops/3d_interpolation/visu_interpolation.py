@@ -6,7 +6,9 @@ sys.path.append('/home/rqi/Projects/toolkits/visualization')
 from show3d_balls import showpoints
 import numpy as np
 from tf_interpolate import three_nn, three_interpolate
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 
 
 pts2 = np.array([[0,0,1],[1,0,0],[0,1,0],[1,1,0]]).astype('float32')
