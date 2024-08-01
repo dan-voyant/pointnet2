@@ -36,4 +36,5 @@
   python3 -m pip install tensorflow[and-cuda]
 
 
-3.
+3. Seems like you might also need tf_slim (a python package)
+  but that seems like you also need to have it be compatable with your tensorflow system?
