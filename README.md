@@ -33,7 +33,7 @@ First, find Tensorflow include and library paths.
 
         TF_INC=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
         TF_LIB=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
-        
+
 Then, add flags of `-I$TF_INC/external/nsync/public -L$TF_LIB -ltensorflow_framework` to the `g++` commands.
 
 ### Usage
@@ -54,7 +54,7 @@ If you have multiple GPUs on your machine, you can also run the multi-GPU versio
 
 After training, to evaluate the classification accuracies (with optional multi-angle voting):
 
-        python evaluate.py --num_votes 12 
+        python evaluate.py --num_votes 12
 
 <i>Side Note:</i> For the XYZ+normal experiment reported in our paper: (1) 5000 points are used and (2) a further random data dropout augmentation is used during training (see commented line after `augment_batch_data` in `train.py` and (3) the model architecture is updated such that the `nsample=128` in the first two set abstraction levels, which is suited for the larger point density in 5000-point samplings.
 
@@ -91,3 +91,17 @@ Our code is released under MIT License (see LICENSE file for details).
 
 * <a href="http://stanford.edu/~rqi/pointnet" target="_blank">PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</a> by Qi et al. (CVPR 2017 Oral Presentation). Code and data released in <a href="https://github.com/charlesq34/pointnet">GitHub</a>.
 * <a href="https://arxiv.org/abs/1711.08488" target="_blank">Frustum PointNets for 3D Object Detection from RGB-D Data</a> by Qi et al. (CVPR 2018) A novel framework for 3D object detection with RGB-D data. Based on 2D boxes from a 2D object detector on RGB images, we extrude the depth maps in 2D boxes to point clouds in 3D space and then realize instance segmentation and 3D bounding box estimation using PointNet/PointNet++. The method proposed has achieved first place on KITTI 3D object detection benchmark on all categories (last checked on 11/30/2017). Code and data release TBD.
+
+
+### some more about installing drivers:
+
+
+## to get cuda
+
+see: https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html#ubuntu
+
+## to get tensorflow
+
+python3 -m pip install tensorflow[and-cuda]
+# Verify the installation:
+python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"

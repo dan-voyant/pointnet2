@@ -17,7 +17,7 @@ REGISTER_OP("ThreeNN")
     .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
         c->set_output(0, c->input(0));
         c->set_output(1, c->input(0));
-        return Status::OK();
+        return absl::OkStatus();
     });
 REGISTER_OP("ThreeInterpolate")
     .Input("points: float32")
@@ -32,7 +32,7 @@ REGISTER_OP("ThreeInterpolate")
         // (b,n,c)
         ::tensorflow::shape_inference::ShapeHandle output = c->MakeShape({c->Dim(dims1, 0), c->Dim(dims2, 1), c->Dim(dims1, 2)});
         c->set_output(0, output);
-        return Status::OK();
+        return absl::OkStatus();
     });
 REGISTER_OP("ThreeInterpolateGrad")
     .Input("points: float32")
@@ -42,7 +42,7 @@ REGISTER_OP("ThreeInterpolateGrad")
     .Output("grad_points: float32")
     .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
         c->set_output(0, c->input(0));
-        return Status::OK();
+        return absl::OkStatus();
     });
 
 float randomf(){
@@ -87,20 +87,20 @@ void threenn_cpu(int b, int n, int m, const float *xyz1, const float *xyz2, floa
                     best3=d;
                     besti3=k;
                 }
-            } 
+            }
             dist[j*3]=best1;
             idx[j*3]=besti1;
             dist[j*3+1]=best2;
             idx[j*3+1]=besti2;
             dist[j*3+2]=best3;
             idx[j*3+2]=besti3;
-        } 
+        }
         xyz1+=n*3;
         xyz2+=m*3;
         dist+=n*3;
         idx+=n*3;
     }
-} 
+}
 
 // input: points (b,m,c), idx (b,n,3), weight (b,n,3)
 // output: out (b,n,c)
@@ -111,14 +111,14 @@ void threeinterpolate_cpu(int b, int m, int c, int n, const float *points, const
         for (int j=0;j<n;++j) {
             w1=weight[j*3];
             w2=weight[j*3+1];
-            w3=weight[j*3+2]; 
+            w3=weight[j*3+2];
             i1=idx[j*3];
             i2=idx[j*3+1];
             i3=idx[j*3+2];
             for (int l=0;l<c;++l) {
                 out[j*c+l] = points[i1*c+l]*w1 + points[i2*c+l]*w2 + points[i3*c+l]*w3;
             }
-        } 
+        }
         points+=m*c;
         idx+=n*3;
         weight+=n*3;
@@ -135,7 +135,7 @@ void threeinterpolate_grad_cpu(int b, int n, int c, int m, const float *grad_out
         for (int j=0;j<n;++j) {
             w1=weight[j*3];
             w2=weight[j*3+1];
-            w3=weight[j*3+2]; 
+            w3=weight[j*3+2];
             i1=idx[j*3];
             i2=idx[j*3+1];
             i3=idx[j*3+2];
@@ -144,7 +144,7 @@ void threeinterpolate_grad_cpu(int b, int n, int c, int m, const float *grad_out
                 grad_points[i2*c+l] += grad_out[j*c+l]*w2;
                 grad_points[i3*c+l] += grad_out[j*c+l]*w3;
             }
-        } 
+        }
         grad_out+=n*c;
         idx+=n*3;
         weight+=n*3;
