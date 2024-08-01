@@ -1,0 +1,39 @@
+1. get CUDA and test it
+
+
+  wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+  sudo dpkg -i cuda-keyring_1.1-1_all.deb
+  sudo apt-get update
+  sudo apt-get -y install cuda-toolkit-12-5
+
+  #maybe add these to your .bashrc
+
+  export PATH=/usr/local/cuda-12.5/bin${PATH:+:${PATH}}
+  export LD_LIBRARY_PATH=/usr/local/cuda-12.5/lib64                         ${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+  sudo apt install freeglut3-dev libglfw3-dev
+  git clone git@github.com:NVIDIA/cuda-samples.git
+  cd cuda-samples
+  make
+
+  # run the nbody test
+  # note that the stuff before is from this post:https://forums.developer.nvidia.com/t/running-sample-gives-code-999-cudaerrorunknown-how-can-this-be-solved/128947
+  __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia ./bin/x86_64/linux/release/nbody
+
+  # run the bandwidth test
+  ./bin/x86_64/linux/release/bandwidthTest
+
+1.1 get cudnn
+  sudo apt-get -y install cudnn
+
+  cd /usr/src/cudnn_samples_v9/mnistCUDNN/
+  # you don't have permission to write here presumably so you need sudo to make it
+  sudo make
+  ./mnistCUDNN
+  # this should return 'passed'
+
+2. get tensorflow (with cuda support) and test it
+  python3 -m pip install tensorflow[and-cuda]
+
+
+3.
